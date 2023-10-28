@@ -22,12 +22,15 @@ protected:
     size_t sz;
     T* pMem;
 public:
-    TDynamicVector() {
+    TDynamicVector() noexcept {
         sz = 1;
         pMem = new T[sz](); // У типа T д.б. констуктор по умолчанию
     }
     TDynamicVector(size_t size) {
         sz = size;
+        if (this->sz > MAX_VECTOR_SIZE) {
+            throw out_of_range("Vector size should be less than 100000000");
+        }
         if (sz == 0) {
             throw out_of_range("Vector size should be greater than zero");
         }
@@ -40,8 +43,14 @@ public:
         if (arr == nullptr) {
             throw("TDynamicVector ctor requires non-nullptr arg");
         }
-        pMem = new T[sz];
-        std::copy(arr, arr + sz, pMem);
+        if (this->sz > MAX_VECTOR_SIZE) {
+            throw out_of_range("Vector size should be less than 100000000");
+        }
+        this->pMem = new T[sz];
+        for (size_t i = 0; i < this->sz; i++) {
+            this->pMem[i] = arr[i];
+        }
+        //std::copy(arr, arr + sz, pMem);
     }
     TDynamicVector(const TDynamicVector& v) {
         this->sz = v.sz;
@@ -144,6 +153,9 @@ public:
 
     // векторные операции
     TDynamicVector operator+(const TDynamicVector& v) {
+        if (this->sz != v.size()) {
+            throw("Two vectors should have equal dimensions");
+        }
         TDynamicVector res(*this);
         for (size_t i = 0; i < this->sz; i++) {
             res.pMem[i] += v.pMem[i];
@@ -151,6 +163,9 @@ public:
         return res;
     }
     TDynamicVector operator-(const TDynamicVector& v) {
+        if (this->sz != v.size()) {
+            throw("Two vectors should have equal dimensions");
+        }
         TDynamicVector res(*this);
         for (size_t i = 0; i < this->sz; i++) {
             res.pMem[i] -= v.pMem[i];
@@ -158,6 +173,9 @@ public:
         return res;
     }
     T operator*(const TDynamicVector& v) noexcept(noexcept(T())) {
+        if (this->sz != v.size()) {
+            throw("Two vectors should have equal dimensions");
+        }
         T res = 0;
         for (size_t i = 0; i < this->sz; i++) {
             res += this->pMem[i] * v.pMem[i];
@@ -181,7 +199,7 @@ public:
         for (size_t i = 0; i < v.sz; i++) {
             ostr << v.pMem[i] << "\t"; // требуется оператор<< для типа T
         }
-    return ostr;
+        return ostr;
     }
 };
 
@@ -195,8 +213,11 @@ class TDynamicMatrix : private TDynamicVector<TDynamicVector<T>> {
 public:
     TDynamicMatrix(size_t s = 1) {
         this->sz = s;
+        if (this->sz > MAX_MATRIX_SIZE) {
+            throw out_of_range("Matrix size should be less than 10000");
+        }
         if (sz == 0) {
-            throw out_of_range("Vector size should be greater than zero");
+            throw out_of_range("Matrix size should be greater than zero");
         }
         this->pMem = new TDynamicVector<T>[this->sz];
         for (size_t i = 0; i < sz; i++) {
@@ -229,19 +250,18 @@ public:
             return false;
         }
         for (size_t i = 0; i < this->sz; i++) {
-            if (this->pMem[i] != m[i]) {
+            if ((*this)[i] != m[i]) {
                 return false;
             }
         }
         return true;
     }
-    bool operator!=(const TDynamicVector& m) const noexcept {
-        //return !(*this == m);
+    bool operator!= (const TDynamicMatrix& m) const noexcept {
         if (this->sz != m.sz) {
             return true;
         }
         for (size_t i = 0; i < this->sz; i++) {
-            if (this->pMem[i] != m[i]) {
+            if ((*this)[i] != m[i]) {
                 return true;
             }
         }
@@ -250,28 +270,33 @@ public:
 
     // матрично-скалярные операции
     TDynamicMatrix operator*(const T& val) {
-        TDynamicMatrix res(*this);
+        TDynamicMatrix res(this->sz);
         for (size_t i = 0; i < this->sz; i++) {
-            this->pMem[i] = this->pMem[i] * val;
+            res[i] = this->pMem[i] * val;
         }
         return res;
     }
 
     // матрично-векторные операции
     TDynamicVector<T> operator*(const TDynamicVector<T>& v) {
+        if (this->sz != v.size()) {
+            throw("Matrix and vector should have equal dimensions");
+        }
         TDynamicVector<T> res(this->sz);
         for (size_t i = 0; i < this->sz; i++) {
-            T res_i = 0;
+            res[i] = 0;
             for (size_t j = 0; j < this->sz; j++) {
-                res_i += v[i] * (this->pMem[i][j]);
+                res[i] += (*this)[i][j] * v[j];
             }
-            res[i] = res_i;
         }
         return res;
     }
 
     // матрично-матричные операции
     TDynamicMatrix operator+(const TDynamicMatrix& m) {
+        if (this->sz != m.size()) {
+            throw("Two matrixs should have equal dimensions");
+        }
         TDynamicMatrix res(this->sz);
         for (size_t i = 0; i < this->sz; i++) {
             res[i] = pMem[i] + m[i];
@@ -279,6 +304,9 @@ public:
         return res;
     }
     TDynamicMatrix operator-(const TDynamicMatrix& m) {
+        if (this->sz != m.size()) {
+            throw("Two matrixs should have equal dimensions");
+        }
         TDynamicMatrix res(*this);
         for (size_t i = 0; i < this->sz; i++) {
             res[i] = this->pMem[i] - m[i];
@@ -287,18 +315,22 @@ public:
     }
 
     TDynamicMatrix operator*(const TDynamicMatrix& m) {
+        if (this->sz != m.size()) {
+            throw("Two matrixs should have equal dimensions");
+        }
         TDynamicMatrix res(this->sz);
         for (size_t i = 0; i < this->sz; i++) {
             for (size_t j = 0; j < this->sz; j++) {
+                res[i][j] = 0;
                 for (size_t k = 0; k < this->sz; k++) {
-                    res[i][j] = this->pMem[i][k] * m[k][j];
+                    res[i][j] += this->pMem[i][k] * m[k][j];
                 }
             }
         }
         return res;
     }
 
-  // ввод/вывод
+    // ввод/вывод
     friend istream& operator>>(istream& istr, TDynamicMatrix& m) {
         for (size_t i = 0; i < m.sz; i++) {
             istr >> m[i]
@@ -313,4 +345,4 @@ public:
     }
 };
 
-#endif
+#endif;
