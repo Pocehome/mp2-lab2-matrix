@@ -1,0 +1,2 @@
+C:\Users\s22380119\source\repos\mp2-lab2-matrix-master\sln\Debug\sample_utmatrix.exe
+C:\Users\s22380119\source\repos\mp2-lab2-matrix-master\sln\Debug\sample_utmatrix.pdb

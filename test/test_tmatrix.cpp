@@ -24,8 +24,7 @@ TEST(TDynamicMatrix, copied_matrix_is_equal_to_source_one) {
 	TDynamicVector<int> v(arr, 6);
 	delete[] arr;
 	TDynamicMatrix<int> m(6);
-	for (size_t i = 0; i < 6; i++)
-	{
+	for (size_t i = 0; i < 6; i++) {
 		m[i] = v;
 	}
 	TDynamicMatrix<int> mCopy(10);
@@ -38,8 +37,7 @@ TEST(TDynamicMatrix, copied_matrix_has_its_own_memory) {
 	TDynamicVector<int> v(arr, 6);
 	delete[] arr;
 	TDynamicMatrix<int> m(6);
-	for (size_t i = 0; i < 6; i++)
-	{
+	for (size_t i = 0; i < 6; i++) {
 		m[i] = v;
 	}
 	TDynamicMatrix<int> mCopy(10);
@@ -80,8 +78,7 @@ TEST(TDynamicMatrix, can_assign_matrices_of_equal_size) {
 	TDynamicVector<int> v(arr, 6);
 	delete[] arr;
 	TDynamicMatrix<int> m(6);
-	for (size_t i = 0; i < 6; i++)
-	{
+	for (size_t i = 0; i < 6; i++) {
 		m[i] = v;
 	}
 	TDynamicMatrix<int> mCopy(6);
@@ -94,8 +91,7 @@ TEST(TDynamicMatrix, assign_operator_change_matrix_size) {
 	TDynamicVector<int> v(arr, 6);
 	delete[] arr;
 	TDynamicMatrix<int> m(6);
-	for (size_t i = 0; i < 6; i++)
-	{
+	for (size_t i = 0; i < 6; i++) {
 		m[i] = v;
 	}
 	TDynamicMatrix<int> mCopy(500);
@@ -108,8 +104,7 @@ TEST(TDynamicMatrix, can_assign_matrices_of_different_size) {
 	TDynamicVector<int> v(arr, 6);
 	delete[] arr;
 	TDynamicMatrix<int> m(6);
-	for (size_t i = 0; i < 6; i++)
-	{
+	for (size_t i = 0; i < 6; i++) {
 		m[i] = v;
 	}
 	TDynamicMatrix<int> mCopy(500);
@@ -122,8 +117,7 @@ TEST(TDynamicMatrix, compare_equal_matrices_return_true) {
 	TDynamicVector<int> v(arr, 6);
 	delete[] arr;
 	TDynamicMatrix<int> m(6);
-	for (size_t i = 0; i < 6; i++)
-	{
+	for (size_t i = 0; i < 6; i++) {
 		m[i] = v;
 	}
 	TDynamicMatrix<int> mCopy(m);
@@ -144,24 +138,20 @@ TEST(TDynamicMatrix, matrices_with_different_size_are_not_equal) {
 TEST(TDynamicMatrix, can_add_matrices_with_equal_size) {
 	TDynamicMatrix<int> m1(3);
 	TDynamicVector<int> v(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v[i] = i;
 	}
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m1[i] = v;
 	}
 	m1 = m1 + m1;
 
 	TDynamicVector<int> v2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v2[i] = i * 2;
 	}
 	TDynamicMatrix<int> m2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m2[i] = v2;
 	}
 	ASSERT_EQ(m1, m2);
@@ -170,24 +160,20 @@ TEST(TDynamicMatrix, can_add_matrices_with_equal_size) {
 TEST(TDynamicMatrix, can_multiply_matrices_with_equal_size) {
 	TDynamicMatrix<int> m1(3);
 	TDynamicVector<int> v(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v[i] = i;
 	}
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m1[i] = v;
 	}
 	m1 = m1 * m1;
 
 	TDynamicVector<int> v2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v2[i] = i * 3;
 	}
 	TDynamicMatrix<int> m2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m2[i] = v2;
 	}
 	ASSERT_EQ(m1, m2);
@@ -208,24 +194,20 @@ TEST(TDynamicMatrix, cant_add_matrices_with_not_equal_size) {
 TEST(TDynamicMatrix, can_subtract_matrices_with_equal_size) {
 	TDynamicMatrix<int> m1(3);
 	TDynamicVector<int> v(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v[i] = i;
 	}
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m1[i] = v;
 	}
 	m1 = m1 - m1;
 
 	TDynamicVector<int> v2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v2[i] = 0;
 	}
 	TDynamicMatrix<int> m2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m2[i] = v2;
 	}
 	ASSERT_EQ(m1, m2);
@@ -240,22 +222,18 @@ TEST(TDynamicMatrix, cant_subtract_matrixes_with_not_equal_size) {
 TEST(TDynamicMatrix, can_multiply_matrix_with_scalar) {
 	TDynamicMatrix<int> m1(3);
 	TDynamicVector<int> v(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v[i] = i;
 	}
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m1[i] = v;
 	}
 	TDynamicMatrix<int> m2(3);
 	TDynamicVector<int> v2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v2[i] = i * 2;
 	}
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m2[i] = v2;
 	}
 	m1 = m1 * 2;
@@ -265,18 +243,15 @@ TEST(TDynamicMatrix, can_multiply_matrix_with_scalar) {
 TEST(TDynamicMatrix, can_multiply_matrix_with_vector_with_equal_size) {
 	TDynamicMatrix<int> m1(3);
 	TDynamicVector<int> v(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v[i] = i;
 	}
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		m1[i] = v;
 	}
 	v = m1 * v;
 	TDynamicVector<int> v2(3);
-	for (size_t i = 0; i < 3; i++)
-	{
+	for (size_t i = 0; i < 3; i++) {
 		v2[i] = 5;
 	}
 	EXPECT_EQ(v, v2);
