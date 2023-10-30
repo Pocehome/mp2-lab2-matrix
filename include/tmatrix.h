@@ -172,9 +172,9 @@ public:
         }
         return res;
     }
-    T operator*(const TDynamicVector& v) noexcept(noexcept(T())) {
-        if (this->sz != v.size()) {
-            throw("Two vectors should have equal dimensions");
+    T operator*(const TDynamicVector& v) {
+        if (this->sz != v.sz) {
+            throw std::length_error("Two vectors should have equal dimensions");
         }
         T res = 0;
         for (size_t i = 0; i < this->sz; i++) {
